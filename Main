@@ -76,7 +76,8 @@ Loader_valid=DataLoader(Dataset_valid,batch_size=Co.batchsize,
                         drop_last=True, shuffle=True)
 Loader_test=DataLoader(Dataset_test,batch_size=Co.batchsize,
                        drop_last=True, shuffle=True)
-                       class Model(nn.Module):
+
+class Model(nn.Module):
     ''' GatedTransformer:
     '''
     def __init__(self):
