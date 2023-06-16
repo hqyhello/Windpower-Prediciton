@@ -1,0 +1,39 @@
+import torch
+import numpy as np
+import pandas as pd
+from matplotlib import pyplot as plt
+from sklearn.preprocessing import StandardScaler
+import torch.nn as nn
+from matplotlib import pyplot as plt
+from torch.utils.data import DataLoader
+from sklearn.model_selection import train_test_split
+from torch.utils.data import DataLoader,TensorDataset
+from sklearn.preprocessing import StandardScaler
+
+data_path1='JSFD04/附件2-场站出力.xlsx'
+data_path2='JSFD04/附件3-测风数据.xlsx'
+df1=pd.read_excel(data_path1)
+df2=pd.read_excel(data_path2)
+DATE=list(df1['时间'].iloc[0:])
+POWER=list(df1['实际功率(MW)'].iloc[1:])
+
+df2_date=list(df2['时间'].iloc[0:])
+df2_speed=list(df2['风机轮毂高度处风速（m/s）'].iloc[0:])
+
+SPEED=[]
+for date in range(len(DATE)):
+    for i in range(len(df2_date)):
+        if DATE[date]==df2_date[i]:
+            SPEED.append(df2_speed[i])
+SPEED_Date=list(df2['时间'].iloc[0:])  
+df= pd.DataFrame(data={
+        'DATE': DATE,
+        'POWER':POWER,
+        'SPEED':SPEED
+        })
+df_std=df.drop('DATE',axis=1)
+ss=StandardScaler()
+df_std=ss.fit_transform(df_std)
+df['POWER']=df_std[:,0]
+df['SPEED']=df_std[:,1]
+torch.save(df,'JSFD03/JSFD03')
